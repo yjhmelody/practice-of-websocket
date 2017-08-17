@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Websocket</title>
+</head>
+<style>
+
+</style>
+
+<body>
+    <input type="text" id="sendText" />
+    <button id="sendBtn">发送</button>
+    <button id="closeBtn">关闭</button>
+    <div id="recv">
+
+    </div>
+    <script>
+        let ws = new WebSocket('ws://localhost:8080/')
+        ws.onopen = () => {
+            console.log('Hello Server!')
+            document.querySelector('#recv').innerHTML = 'Connected'
+        }
+        ws.onclose = () => {
+            console.log('Bye Server!')
+            document.querySelector('#recv').innerHTML = 'Closed'
+        }
+        ws.onmessage = function (e) {
+            console.log(e.data)
+            document.querySelector('#recv').innerHTML = e.data
+        }
+
+        document.querySelector('#sendBtn').addEventListener('click', () => {
+            ws.send(document.querySelector('#sendText').value)
+            console.log('send', document.querySelector('#sendText').value)
+        })
+
+        document.querySelector('#closeBtn').addEventListener('click', () => {
+            ws.close(1000, "吃饭去了")
+        })
+    </script>
+</body>
+
+</html>
