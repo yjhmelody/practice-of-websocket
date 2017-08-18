@@ -20,22 +20,33 @@
     </div>
     <script>
         let ws = new WebSocket('ws://localhost:8080/')
+
+        function showMessage(msg) {
+            let div = document.createElement('div')
+            div.innerText = msg
+            document.body.appendChild(div)
+        }
+
         ws.onopen = () => {
-            console.log('Hello Server!')
+            // console.log('Hello Server!')
             document.querySelector('#recv').innerHTML = 'Connected'
         }
         ws.onclose = () => {
-            console.log('Bye Server!')
+            // console.log('Bye Server!')
             document.querySelector('#recv').innerHTML = 'Closed'
+            document.querySelector('#sendBtn').removeEventListener('click')
         }
         ws.onmessage = function (e) {
-            console.log(e.data)
-            document.querySelector('#recv').innerHTML = e.data
+            // console.log(e.data)
+            showMessage(e.data)
         }
 
         document.querySelector('#sendBtn').addEventListener('click', () => {
-            ws.send(document.querySelector('#sendText').value)
-            console.log('send', document.querySelector('#sendText').value)
+            let text = document.querySelector('#sendText').value
+            if (text) {
+                ws.send(text)
+            }
+            // console.log('send', document.querySelector('#sendText').value)
         })
 
         document.querySelector('#closeBtn').addEventListener('click', () => {
